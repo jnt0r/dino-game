@@ -40,21 +40,20 @@
         }
 
         class Game {
-            constructor() {
+            constructor(canvas) {
                 this.gameIsRunning = true;
                 this.isJumping = false;
                 this.y = 0;
                 this.obstacles = [new Obstacle(800, 20, 25), new Obstacle(1000, 20, 25), new Obstacle(1200, 20, 25)];
 
-                this.canvas = document.getElementById('game');
                 this.restartBtn = document.getElementById('resetBtn');
-                this.ctx = this.canvas.getContext('2d');
-                this.ctx.translate(0, this.canvas.height);
+                this.ctx = canvas.getContext('2d');
+                this.ctx.translate(0, canvas.height);
                 this.ctx.scale(1, -1);
 
                 setInterval(() => {
                     if (this.gameIsRunning) {
-                        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
                         this.ctx.fillRect(0, this.y, 20, 50);
 
                         this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
@@ -98,7 +97,9 @@
         const JUMP_KEY = 'Space';
         const JUMP_DURATION = 333;
 
-        const game = new Game();
+        const canvas = document.getElementById('game');
+
+        const game = new Game(canvas);
     </script>
 </body>
 
