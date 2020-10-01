@@ -53,44 +53,52 @@
                 this.ctx.translate(0, canvas.height);
                 this.ctx.scale(1, -1);
 
+                this.registerKeyListener();
+
                 setInterval(() => {
-                    if (this.gameIsRunning) {
-                        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        this.ctx.fillRect(this.dinoX, this.dinoY, this.dinoWidth, this.dinoHeight);
-
-                        this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
-
-                        this.obstacles.forEach(obstacle => {
-                            if (obstacle.isPointInside(0 - obstacle.width, 0)) {
-                                this.obstacles.splice(this.obstacles.indexOf(obstacle), 1);
-                                return;
-                            }
-
-                            if (obstacle.isPointInside(this.dinoX, this.dinoY) || obstacle.isPointInside(this.dinoX + this.dinoWidth, this.dinoY)) {
-                                alert('Game over');
-                                this.gameIsRunning = false;
-                                this.restartBtn.disabled = false;
-                            }
-
-                            obstacle.move();
-                        });
-
-                        const lastObstacleX = Math.max.apply(Math, this.obstacles.map(function(o) { return o.x; }));
-
-                        // If no obstacle is present in canvas, create a new one at the right end of the canvas
-                        if (lastObstacleX === -Infinity) {
-                            this.obstacles.push(new Obstacle(canvas.width, 20, 25));
-                        } else if (canvas.width - lastObstacleX >= 100) {
-                            this.obstacles.push(new Obstacle(Math.floor(canvas.width + Math.random() * 600), 20, 25));
-                        }
-                    }
+                    this.gameLoop();
                 }, 1000 / 60);
+            }
 
+            registerKeyListener() {
                 window.addEventListener('keydown', (evt) => {
                     if (evt.code === JUMP_KEY) {
                         this.jump();
                     }
                 });
+            }
+
+            gameLoop() {
+                if (this.gameIsRunning) {
+                    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    this.ctx.fillRect(this.dinoX, this.dinoY, this.dinoWidth, this.dinoHeight);
+
+                    this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
+
+                    this.obstacles.forEach(obstacle => {
+                        if (obstacle.isPointInside(0 - obstacle.width, 0)) {
+                            this.obstacles.splice(this.obstacles.indexOf(obstacle), 1);
+                            return;
+                        }
+
+                        if (obstacle.isPointInside(this.dinoX, this.dinoY) || obstacle.isPointInside(this.dinoX + this.dinoWidth, this.dinoY)) {
+                            alert('Game over');
+                            this.gameIsRunning = false;
+                            this.restartBtn.disabled = false;
+                        }
+
+                        obstacle.move();
+                    });
+
+                    const lastObstacleX = Math.max.apply(Math, this.obstacles.map(function (o) { return o.x; }));
+
+                    // If no obstacle is present in canvas, create a new one at the right end of the canvas
+                    if (lastObstacleX === -Infinity) {
+                        this.obstacles.push(new Obstacle(canvas.width, 20, 25));
+                    } else if (canvas.width - lastObstacleX >= 100) {
+                        this.obstacles.push(new Obstacle(Math.floor(canvas.width + Math.random() * 600), 20, 25));
+                    }
+                }
             }
 
             jump() {
