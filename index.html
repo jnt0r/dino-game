@@ -54,12 +54,12 @@
                 setInterval(() => {
                     if (this.gameIsRunning) {
                         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        this.ctx.fillRect(0, this.y, 20, 50);
+                        this.ctx.fillRect(50, this.y, 20, 50);
 
                         this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
 
                         this.obstacles.forEach(obstacle => {
-                            if (obstacle.isPointInside(0, this.y) || obstacle.isPointInside(20, this.y)) {
+                            if (obstacle.isPointInside(50, this.y) || obstacle.isPointInside(70, this.y)) {
                                 alert('Game over');
                                 this.gameIsRunning = false;
                                 this.restartBtn.disabled = false;
