@@ -46,7 +46,7 @@
                 this.dinoWidth = 20;
                 this.dinoHeight = 50;
 
-                this.obstacles = [new Obstacle(800, 20, 25), new Obstacle(1000, 20, 25), new Obstacle(1200, 20, 25)];
+                this.obstacles = [];
 
                 this.restartBtn = document.getElementById('resetBtn');
                 this.ctx = canvas.getContext('2d');
@@ -74,6 +74,15 @@
 
                             obstacle.move();
                         });
+
+                        const lastObstacleX = Math.max.apply(Math, this.obstacles.map(function(o) { return o.x; }));
+
+                        // If no obstacle is present in canvas, create a new one at the right end of the canvas
+                        if (lastObstacleX === -Infinity) {
+                            this.obstacles.push(new Obstacle(canvas.width, 20, 25));
+                        } else if (canvas.width - lastObstacleX >= 100) {
+                            this.obstacles.push(new Obstacle(Math.floor(canvas.width + Math.random() * 600), 20, 25));
+                        }
                     }
                 }, 1000 / 60);
 
@@ -96,6 +105,7 @@
             }
 
             restart() {
+                this.obstacles = [];
                 this.gameIsRunning = true;
                 this.restartBtn.disabled = true;
             }
