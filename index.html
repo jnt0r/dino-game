@@ -26,9 +26,6 @@
 
             move() {
                 this.x -= this.dx;
-                if (this.x === 0) {
-                    this.x = canvas.width;
-                }
             }
 
             isPointInside(x, y) {
@@ -59,6 +56,11 @@
                         this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
 
                         this.obstacles.forEach(obstacle => {
+                            if (obstacle.isPointInside(0 - obstacle.width, 0)) {
+                                this.obstacles.splice(this.obstacles.indexOf(obstacle), 1);
+                                return;
+                            }
+
                             if (obstacle.isPointInside(50, this.y) || obstacle.isPointInside(70, this.y)) {
                                 alert('Game over');
                                 this.gameIsRunning = false;
@@ -66,7 +68,7 @@
                             }
 
                             obstacle.move();
-                        });                        
+                        });
                     }
                 }, 1000 / 60);
 
