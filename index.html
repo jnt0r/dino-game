@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino Game</title>
+</head>
+
+<body>
+    <canvas id="game" width="800px" height="200px"></canvas>
+    <button id="resetBtn" onclick="game.restart()" disabled>Restart</button>
+
+    <script>
+        class Obstacle {
+            constructor(x, width, height) {
+                this.x = x;
+                this.dx = 5;
+                this.width = width;
+                this.height = height;
+            }
+
+            render(ctx) {
+                ctx.fillRect(this.x, 0, 20, 25);
+            }
+
+            move() {
+                this.x -= this.dx;
+                if (this.x === 0) {
+                    this.x = canvas.width;
+                }
+            }
+
+            isPointInside(x, y) {
+                if (y <= this.height && x >= this.x && x <= (this.x + this.width)) {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        class Game {
+            constructor() {
+                this.gameIsRunning = true;
+                this.isJumping = false;
+                this.y = 0;
+                this.obstacles = [new Obstacle(800, 20, 25), new Obstacle(1000, 20, 25), new Obstacle(1200, 20, 25)];
+
+                this.canvas = document.getElementById('game');
+                this.restartBtn = document.getElementById('resetBtn');
+                this.ctx = this.canvas.getContext('2d');
+                this.ctx.translate(0, this.canvas.height);
+                this.ctx.scale(1, -1);
+
+                setInterval(() => {
+                    if (this.gameIsRunning) {
+                        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                        this.ctx.fillRect(0, this.y, 20, 50);
+
+                        this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
+
+                        this.obstacles.forEach(obstacle => {
+                            if (obstacle.isPointInside(0, this.y) || obstacle.isPointInside(20, this.y)) {
+                                alert('Game over');
+                                this.gameIsRunning = false;
+                                this.restartBtn.disabled = false;
+                            }
+
+                            obstacle.move();
+                        });                        
+                    }
+                }, 1000 / 60);
+
+                window.addEventListener('keydown', (evt) => {
+                    if (evt.code === JUMP_KEY) {
+                        this.jump();
+                    }
+                });
+            }
+
+            jump() {
+                if (!this.isJumping) {
+                    this.isJumping = true;
+                    this.y = 50;
+                    setTimeout(() => {
+                        this.y = 0;
+                        this.isJumping = false;
+                    }, JUMP_DURATION);
+                }
+            }
+
+            restart() {
+                this.gameIsRunning = true;
+                this.restartBtn.disabled = true;
+            }
+        }
+
+        const JUMP_KEY = 'Space';
+        const JUMP_DURATION = 333;
+
+        const game = new Game();
+    </script>
+</body>
+
+</html>
