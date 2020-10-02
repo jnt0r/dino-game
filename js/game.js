@@ -30,10 +30,35 @@ class Game {
 
     gameLoop() {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.render();
+        this.moveObstacles();
+        this.createNewObstacle();
+
+        if (this.gameIsRunning) {
+            window.requestAnimationFrame(() => this.gameLoop());
+        }
+    }
+
+    render() {
+        // Draw dino
         this.ctx.fillRect(this.dinoX, this.dinoY, this.dinoWidth, this.dinoHeight);
-
+        // Draw all obstacles
         this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
+    }
 
+    createNewObstacle() {
+        const lastObstacleX = Math.max.apply(Math, this.obstacles.map(function (o) { return o.x; }));
+
+        // If no obstacle is present in canvas, create a new one at the right end of the canvas
+        if (lastObstacleX === -Infinity) {
+            this.obstacles.push(new Obstacle(canvas.width, 20, 25));
+        } else if (canvas.width - lastObstacleX >= 100) {
+            this.obstacles.push(new Obstacle(Math.floor(canvas.width + Math.random() * 600), 20, 25));
+        }
+    }
+
+    moveObstacles() {
         this.obstacles.forEach(obstacle => {
             if (obstacle.isPointInside(0 - obstacle.width, 0)) {
                 this.obstacles.splice(this.obstacles.indexOf(obstacle), 1);
@@ -48,19 +73,6 @@ class Game {
 
             obstacle.move();
         });
-
-        const lastObstacleX = Math.max.apply(Math, this.obstacles.map(function (o) { return o.x; }));
-
-        // If no obstacle is present in canvas, create a new one at the right end of the canvas
-        if (lastObstacleX === -Infinity) {
-            this.obstacles.push(new Obstacle(canvas.width, 20, 25));
-        } else if (canvas.width - lastObstacleX >= 100) {
-            this.obstacles.push(new Obstacle(Math.floor(canvas.width + Math.random() * 600), 20, 25));
-        }
-
-        if (this.gameIsRunning) {
-            window.requestAnimationFrame(() => this.gameLoop());
-        }
     }
 
     jump() {
