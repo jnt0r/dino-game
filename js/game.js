@@ -7,6 +7,7 @@ class Game {
         this.dinoY = 0;
         this.dinoWidth = 20;
         this.dinoHeight = 50;
+        this.jumpX = 0;
 
         this.obstacles = [];
 
@@ -30,6 +31,17 @@ class Game {
 
     gameLoop() {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (this.isJumping) {
+            // (‑((x/​2-​10)^​2))+​100
+            this.dinoY = (-Math.pow(this.jumpX/2 - 10, 2)) + 100;
+            this.jumpX++;
+        
+            if (this.jumpX > 40) {
+                this.isJumping = false;
+                this.jumpX = 0;
+            }
+        }
 
         this.render();
         this.moveObstacles();
@@ -78,11 +90,6 @@ class Game {
     jump() {
         if (!this.isJumping) {
             this.isJumping = true;
-            this.dinoY = 50;
-            setTimeout(() => {
-                this.dinoY = 0;
-                this.isJumping = false;
-            }, JUMP_DURATION);
         }
     }
 
