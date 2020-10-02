@@ -32,17 +32,7 @@ class Game {
     gameLoop() {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        if (this.isJumping) {
-            // (‑((x/​2-​10)^​2))+​100
-            this.dinoY = (-Math.pow(this.jumpX/2 - 10, 2)) + 100;
-            this.jumpX++;
-        
-            if (this.jumpX > 40) {
-                this.isJumping = false;
-                this.jumpX = 0;
-            }
-        }
-
+        this.processJumping();
         this.render();
         this.moveObstacles();
         this.createNewObstacle();
@@ -90,6 +80,19 @@ class Game {
     jump() {
         if (!this.isJumping) {
             this.isJumping = true;
+        }
+    }
+
+    processJumping() {
+        if (this.isJumping) {
+            // (‑((x/​2-​10)^​2))+​100
+            this.dinoY = (-Math.pow(this.jumpX/2 - 10, 2)) + 100;
+            this.jumpX++;
+        
+            if (this.jumpX > 40) {
+                this.isJumping = false;
+                this.jumpX = 0;
+            }
         }
     }
 
