@@ -10,8 +10,14 @@
 </head>
 
 <body>
-    <canvas id="game" width="800px" height="200px" style="border: 1px solid black;"></canvas>
-    <button id="resetBtn" onclick="game.startGame()" disabled>Restart</button>
+    <div class="game-wrapper">
+        <canvas id="game" width="800px" height="200px"></canvas>
+        <div class="game-over-screen hidden">
+            <span>GAME OVER!</span>
+            <button id="resetBtn" onclick="game.startGame()" disabled>Restart</button>
+        </div>
+    </div>
+
 
     <script src="js/obstacle.js"></script>
     <script src="js/game.js"></script>

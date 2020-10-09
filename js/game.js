@@ -68,9 +68,9 @@ class Game {
             }
 
             if (obstacle.isPointInside(this.dinoX, this.dinoY) || obstacle.isPointInside(this.dinoX + this.dinoWidth, this.dinoY)) {
-                alert('Game over');
                 this.gameIsRunning = false;
                 this.restartBtn.disabled = false;
+                gameOverScreen.classList.remove('hidden');
             }
 
             obstacle.move();
@@ -98,6 +98,7 @@ class Game {
 
     startGame() {
         this.obstacles = [];
+        gameOverScreen.classList.add('hidden');
         this.gameIsRunning = true;
         this.restartBtn.disabled = true;
         window.requestAnimationFrame(() => this.gameLoop());
