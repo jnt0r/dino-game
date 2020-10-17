@@ -27,6 +27,7 @@ class Game {
         this.createNewObstacle();
 
         if (this.gameIsRunning) {
+            this.score += SCORE_PER_FRAME;
             window.requestAnimationFrame(() => this.gameLoop());
         }
     }
@@ -34,8 +35,18 @@ class Game {
     render() {
         // Draw dino
         this.ctx.fillRect(this.dinoX, this.dinoY, this.dinoWidth, this.dinoHeight);
+        this.renderScore();
         // Draw all obstacles
         this.obstacles.forEach(obstacle => obstacle.render(this.ctx));
+    }
+
+    renderScore() {
+        this.ctx.save();
+        this.ctx.translate(0, canvas.height);
+        this.ctx.scale(1, -1);
+        
+        this.ctx.strokeText(zfill(Math.floor(this.score), 5), canvas.width - 45, 20);
+        this.ctx.restore();
     }
 
     createNewObstacle() {
