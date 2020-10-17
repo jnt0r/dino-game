@@ -1,16 +1,5 @@
 class Game {
     constructor(canvas) {
-        this.gameIsRunning = true;
-        this.isJumping = false;
-
-        this.dinoX = 50;
-        this.dinoY = 0;
-        this.dinoWidth = 20;
-        this.dinoHeight = 50;
-        this.jumpX = 0;
-
-        this.obstacles = [];
-
         this.restartBtn = document.getElementById('resetBtn');
         this.ctx = canvas.getContext('2d');
         this.ctx.translate(0, canvas.height);
@@ -97,9 +86,18 @@ class Game {
     }
 
     startGame() {
-        this.obstacles = [];
-        gameOverScreen.classList.add('hidden');
         this.gameIsRunning = true;
+        this.isJumping = false;
+
+        this.dinoX = 50;
+        this.dinoY = 0;
+        this.dinoWidth = 20;
+        this.dinoHeight = 50;
+        this.jumpX = 0;
+        this.score = 0;
+        this.obstacles = [];
+
+        gameOverScreen.classList.add('hidden');
         this.restartBtn.disabled = true;
         window.requestAnimationFrame(() => this.gameLoop());
     }
